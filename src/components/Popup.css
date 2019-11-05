@@ -1,0 +1,42 @@
+a.popup-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: inherit;
+}
+
+.popup-categories {
+  font-style: italic;
+}
+
+.popup-thumbnail {
+  margin-top: 8px;
+}
+
+.popup-thumbnail img {
+  width: 100%;
+  border-radius: 2px;
+  max-height: 250px;
+}
+
+.popup-ratings {
+  margin: 5px 0;
+}
+
+.popup-ratings-stars {
+  color: #f8ce0b;
+  margin-right: 5px;
+}
+
+.popup-price {
+  letter-spacing: 2px;
+}
+
+.popup-bottom-group {
+  display: flex;
+}
+
+.popup-heart-icon {
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+}

@@ -1,0 +1,19 @@
+.search-bar {
+    margin-bottom: 40px;
+  }
+  
+  .search-bar-input {
+    font-family: inherit;
+    font-size: 18px;
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #DDD;
+    height: 35px;
+    transition: 0.3s ease-out;
+  }
+  
+  .search-bar-input:focus {
+    outline: none;
+    border-bottom-color: #000;
+  }
+  

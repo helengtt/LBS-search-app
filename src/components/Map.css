@@ -1,0 +1,22 @@
+.leaflet-container {
+    height: 100%;
+    width: 100%;
+}
+
+.leaflet-popup {
+  min-width: 200px;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.leaflet-popup-content {
+  margin: 10px 14px;
+  font-size: 14px;
+}
+
+.leaflet-marker-icon:focus {
+  outline: none;
+}

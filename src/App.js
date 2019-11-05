@@ -1,26 +1,68 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import SideBar from './components/SideBar'
+import Map from './components/Map'
+import {searchBusiness} from './modules/yelpApi'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const INITIAL_VIEWPORT = {
+  center:[-33.872961, 151.208452],
+  zoom: 17,
+
+}
+
+class App extends Component {
+  constructor(props){
+    super(props)
+
+    this.state = {
+      results: [],
+      mapCenter : {
+        lat: INITIAL_VIEWPORT.center[0], 
+        lng: INITIAL_VIEWPORT.center[1],
+      },
+      searchStr: '',
+    }
+  }
+
+  handleSearch = async (searchStr) => {
+    const results = await searchBusiness(searchStr, this.state.mapCenter)
+    this.setState({ results, searchStr })
+    console.log('results:', results)
+  }
+
+  handlePanSearch = async () => {
+    if (!this.state.searchStr || this.state.searchStr.length < 3) {
+      return
+    }
+
+    this.handleSearch(this.state.searchStr)
+  }
+
+  handleViewportChange = (viewport) => {
+    this.setState ({
+      mapCenter: {
+        lat: viewport.center[0],
+        lng: viewport.center[1],
+      },
+    })
+
+    if (viewport.zoom >14) this.handlePanSearch()
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <SideBar
+          onSearch={this.handleSearch}
+        />
+        <Map 
+          initialViewport={INITIAL_VIEWPORT}
+          results={this.state.results}
+          onViewportChanged={this.handleViewportChange}
+        />
+      </div>
+    );
+  }
 }
 
 export default App;
