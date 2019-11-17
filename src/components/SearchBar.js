@@ -3,7 +3,7 @@ import './SearchBar.css';
 import { debounce } from 'throttle-debounce';
 
 export default class SearchBar extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
             activeSuggestion: 0,
@@ -12,31 +12,55 @@ export default class SearchBar extends Component {
             text: '',
         }
     }
+    autocompleteSearch = () => {
+        console.log('autocompleteSearch() text=', Date.now(), this.state.text)
+        this.props.onSearch(this.state.text).then(() => {
+            console.log('autocompleteSearch_then() text=', Date.now(), this.state.text)
+            const suggestions = this.props.results.map(r => r.name);
+            console.log("suggestions=", suggestions);
+            const filteredSuggestions = suggestions.filter(
+                suggestion => suggestion.toLowerCase().indexOf(this.state.text.toLowerCase())
+            );
+
+            this.setState({
+                activeSuggestion: 0,
+                filteredSuggestions,
+                showSuggestions: true
+            })
+        })
+    }
+    /* Another way for async */
+    // autocompleteSearch = async() => {
+    //     console.log('autocompleteSearch() text=', Date.now(), this.state.text)
+    //     await this.props.onSearch(this.state.text)
+    //     console.log('autocompleteSearch_afterawait() text=', Date.now(), this.state.text)
+    //     const suggestions = this.props.results.map(r => r.name)
+    //     console.log("suggestions=", suggestions)
+    //     const filteredSuggestions = suggestions.filter(
+    //         suggestion => suggestion.toLowerCase().indexOf(this.state.text.toLowerCase())
+    //     )
+
+    //     this.setState({
+    //         activeSuggestion: 0,
+    //         filteredSuggestions,
+    //         showSuggestions: true
+    //     })
+    // }
+    autocompleteSearchDebounced = debounce(300, this.autocompleteSearch)
 
     // debounce an autocomplete input
-    handleTextChange =  async(e) => {
-        e.persist();
-        const text = e.currentTarget.value;
-        await this.props.onSearch(text);
-        const suggestions = this.props.results.map(r => r.name);
-        console.log("suggestions=", suggestions);
-        const filteredSuggestions = suggestions.filter(
-            suggestion =>suggestion.toLowerCase().indexOf(text.toLowerCase())
-        );
-
-        this.setState({
-            activeSuggestion:0,
-            filteredSuggestions, 
-            showSuggestions:true,
-            text: text
-        })
+    handleTextChange = (e) => {
+        this.setState({ text: e.currentTarget.value }, () => {
+            console.log('handleTextChange() text=', Date.now(), this.state.text)
+            this.autocompleteSearchDebounced(this.state.text);
+        });
     }
 
     onClick = (e) => {
         this.setState({
-            activeSuggestion:0,
-            filteredSuggestions:[],
-            showSuggestions:false,
+            activeSuggestion: 0,
+            filteredSuggestions: [],
+            showSuggestions: false,
             text: e.currentTarget.innerText
         })
     }
@@ -45,9 +69,9 @@ export default class SearchBar extends Component {
         // User pressed the enter key, update the input and close the suggestions
         if (e.key === 'Enter') {
             this.setState({
-                activeSuggestion:0,
-                showSuggestions:false,
-                text:this.state.filteredSuggestions[this.state.activeSuggestion]
+                activeSuggestion: 0,
+                showSuggestions: false,
+                text: this.state.filteredSuggestions[this.state.activeSuggestion]
             })
         }
         // User pressed the up arrow, decrement the index
@@ -56,15 +80,15 @@ export default class SearchBar extends Component {
                 return;
             }
 
-            this.setState({activeSuggestion: this.state.activeSuggestion - 1})
+            this.setState({ activeSuggestion: this.state.activeSuggestion - 1 })
         }
         // User pressed the down arrow, increment the index
         else if (e.key === 'Down') {
             if (this.state.activeSuggestion - 1 === this.state.filteredSuggestions.length) {
                 return;
-            } 
+            }
 
-            this.setState({activeSuggestion: this.state.activeSuggestion + 1})
+            this.setState({ activeSuggestion: this.state.activeSuggestion + 1 })
         }
     }
 
@@ -74,13 +98,13 @@ export default class SearchBar extends Component {
             onClick,
             handleKeyPress,
             state: {
-              activeSuggestion,
-              filteredSuggestions,
-              showSuggestions,
-              text
+                activeSuggestion,
+                filteredSuggestions,
+                showSuggestions,
+                text
             }
-          } = this;
-      
+        } = this;
+
         let suggestionsListComponent;
 
         if (showSuggestions && text) {
@@ -115,7 +139,7 @@ export default class SearchBar extends Component {
         }
         return (
             <div className="search-bar">
-                <input 
+                <input
                     className="search-bar-input"
                     type="text"
                     placeholder="Search and press enter"

@@ -5,29 +5,51 @@ import Map from './components/Map'
 import {searchBusiness} from './modules/yelpApi'
 
 const INITIAL_VIEWPORT = {
-  center:[-33.872961, 151.208452],
+  center: [-33.872961, 151.208452],
   zoom: 17,
 
 }
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
 
     this.state = {
       results: [],
-      mapCenter : {
-        lat: INITIAL_VIEWPORT.center[0], 
+      mapCenter: {
+        lat: INITIAL_VIEWPORT.center[0],
         lng: INITIAL_VIEWPORT.center[1],
       },
       searchStr: '',
     }
   }
+  
+  /* Test with mock API */
+  // resolveSoon = (x) => {
+  //   return new Promise(resolve => {
+  //     setTimeout(() => {
+  //       resolve([x]);
+  //     }, 2000);
+  //   });
+  // }
+
+  // searchBusiness = (searchStr, meh) =>
+  //   this.resolveSoon(searchStr);
 
   handleSearch = async (searchStr) => {
-    const results = await searchBusiness(searchStr, this.state.mapCenter)
-    this.setState({ results, searchStr })
-    console.log('this.state.results=', this.state.results)
+    console.log('handleSearch() searchStr=', Date.now(), searchStr)    
+    return searchBusiness(searchStr, this.state.mapCenter)
+      .then((data) => {
+        console.log('handleSearch() searchStr=', Date.now(), searchStr)            
+        console.log('data=', data)
+        this.setState({ results: data, searchStr: searchStr })
+      })
+    /* Another way for async */    
+    // console.log('handleSearch() searchStr=', Date.now(), searchStr)  
+    // const results = await searchBusiness(searchStr, this.state.mapCenter)
+    // console.log('handleSearch() searchStr=', Date.now(), searchStr)  
+    // this.setState({ results, searchStr })
+    // console.log('this.state.results=', this.state.results)
   }
 
   handlePanSearch = async () => {
@@ -39,14 +61,14 @@ class App extends Component {
   }
 
   handleViewportChange = (viewport) => {
-    this.setState ({
+    this.setState({
       mapCenter: {
         lat: viewport.center[0],
         lng: viewport.center[1],
       },
     })
 
-    if (viewport.zoom >14) this.handlePanSearch()
+    if (viewport.zoom > 14) this.handlePanSearch()
   }
 
   render() {
@@ -56,7 +78,7 @@ class App extends Component {
           onSearch={this.handleSearch}
           results={this.state.results}
         />
-        <Map 
+        <Map
           initialViewport={INITIAL_VIEWPORT}
           results={this.state.results}
           onViewportChanged={this.handleViewportChange}
