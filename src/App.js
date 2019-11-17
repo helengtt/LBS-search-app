@@ -27,7 +27,7 @@ class App extends Component {
   handleSearch = async (searchStr) => {
     const results = await searchBusiness(searchStr, this.state.mapCenter)
     this.setState({ results, searchStr })
-    console.log('results:', results)
+    console.log('this.state.results=', this.state.results)
   }
 
   handlePanSearch = async () => {
@@ -54,6 +54,7 @@ class App extends Component {
       <div className="container">
         <SideBar
           onSearch={this.handleSearch}
+          results={this.state.results}
         />
         <Map 
           initialViewport={INITIAL_VIEWPORT}

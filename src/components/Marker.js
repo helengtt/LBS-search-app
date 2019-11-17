@@ -3,6 +3,7 @@ import Leaflet from 'leaflet'
 import {Marker as LeafletMarker} from 'react-leaflet'
 import mapIcon from '../svg/map.svg' 
 import Popup from './Popup'
+import './Marker.css'
 
 export default class Marker extends Component {
     render () {

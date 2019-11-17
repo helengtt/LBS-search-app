@@ -1,5 +1,5 @@
 .sidebar {
-    width: 345px;
+    width: 35%;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     z-index: 1000;
     position: relative;
@@ -7,26 +7,7 @@
     padding-top: 10px;
 }
 
-.sidebar-top {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.sidebar-logo {
-  width: 60px;
-  margin-left: -15px;
-}
-
 .sidebar-title {
   font-size: 20px;
   font-weight: 700;
 }
-
-.sidebar-made-by {
-  position: absolute;
-  bottom: 25px;
-  left: 25px;
-  font-size: 11px;
-}
-  
