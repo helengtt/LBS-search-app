@@ -9,15 +9,16 @@ export default class SearchBar extends Component {
             activeSuggestion: 0,
             filteredSuggestions: [],
             showSuggestions: false,
-            text: '',
+            searchresults: [],
+            text: ''
         }
     }
     autocompleteSearch = () => {
-        console.log('autocompleteSearch() text=', Date.now(), this.state.text)
+        // console.log('autocompleteSearch() text=', Date.now(), this.state.text)
         this.props.onSearch(this.state.text).then(() => {
-            console.log('autocompleteSearch_then() text=', Date.now(), this.state.text)
+            // console.log('autocompleteSearch_then() text=', Date.now(), this.state.text)
             const suggestions = this.props.results.map(r => r.name);
-            console.log("suggestions=", suggestions);
+            // console.log("suggestions=", suggestions);
             const filteredSuggestions = suggestions.filter(
                 suggestion => suggestion.toLowerCase().indexOf(this.state.text.toLowerCase())
             );
@@ -50,8 +51,8 @@ export default class SearchBar extends Component {
 
     // debounce an autocomplete input
     handleTextChange = (e) => {
-        this.setState({ text: e.currentTarget.value }, () => {
-            console.log('handleTextChange() text=', Date.now(), this.state.text)
+        this.setState({ text: e.currentTarget.value}, () => {
+            // console.log('handleTextChange() text=', Date.now(), this.state.text)
             this.autocompleteSearchDebounced(this.state.text);
         });
     }
@@ -62,6 +63,8 @@ export default class SearchBar extends Component {
             filteredSuggestions: [],
             showSuggestions: false,
             text: e.currentTarget.innerText
+        }, () => {
+            this.autocompleteSearchDebounced(this.state.text);
         })
     }
 
@@ -71,8 +74,18 @@ export default class SearchBar extends Component {
             this.setState({
                 activeSuggestion: 0,
                 showSuggestions: false,
-                text: this.state.filteredSuggestions[this.state.activeSuggestion]
+                // text: this.state.filteredSuggestions[this.state.activeSuggestion]
+                text:e.currentTarget.value
             })
+            if (this.state.filteredSuggestions.length) {
+                this.setState({searchresults: this.state.filteredSuggestions.map((suggestion,index) => (
+                    <li key={index}>
+                        {suggestion}
+                    </li>
+                ))})
+            } else {
+                this.setState({searchresults:[]})
+            }            
         }
         // User pressed the up arrow, decrement the index
         else if (e.key === 'Up') {
@@ -131,12 +144,13 @@ export default class SearchBar extends Component {
                 )
             } else {
                 suggestionsListComponent = (
-                    <div>
+                    <div className="no-suggestion">
                         <em>No suggestions found</em>
                     </div>
                 )
             }
         }
+
         return (
             <div className="search-bar">
                 <input
@@ -150,7 +164,9 @@ export default class SearchBar extends Component {
                 />
                 <div className="search-sub-border"></div>
                 {suggestionsListComponent}
-
+                <ul className='searchresults-list'>
+                    {this.state.searchresults}
+                </ul>
             </div>
         )
     }

@@ -55,3 +55,16 @@
   right: 0;
   left: 0;
 }
+
+.searchresults-list {
+  list-style-type:none;
+  padding:0;
+  margin:0;
+  z-index: -1;
+  position: absolute;
+  top: 50px;
+}
+
+.no-suggestion {
+  background-color: #fff;
+}

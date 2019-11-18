@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './SideBar.css';
 import SearchBar from './SearchBar'
-import Suggestions from './Suggestions'
 
 export default class SideBar extends Component {
     render() {
@@ -12,7 +11,6 @@ export default class SideBar extends Component {
                     onSearch={this.props.onSearch}
                     results={this.props.results}
                 />
-                <Suggestions results={this.props.results}/>
             </div>
         )
     }
