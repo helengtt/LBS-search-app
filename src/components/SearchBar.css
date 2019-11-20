@@ -45,6 +45,10 @@
   background-color: #999;
   cursor: pointer;
 }
+
+.suggestion-active:focus {
+  border: 1px red;
+}
   
 .search-sub-border {
   border-bottom: 1px solid #DDD;

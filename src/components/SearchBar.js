@@ -6,12 +6,14 @@ export default class SearchBar extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            activeSuggestion: 0,
+            activeSuggestion: null,
             filteredSuggestions: [],
             showSuggestions: false,
             searchresults: [],
             text: ''
         }
+
+        this.focusRef= React.createRef();
     }
     autocompleteSearch = () => {
         // console.log('autocompleteSearch() text=', Date.now(), this.state.text)
@@ -19,12 +21,12 @@ export default class SearchBar extends Component {
             // console.log('autocompleteSearch_then() text=', Date.now(), this.state.text)
             const suggestions = this.props.results.map(r => r.name);
             // console.log("suggestions=", suggestions);
+            // Filter our suggestions that don't contain the user's input
             const filteredSuggestions = suggestions.filter(
-                suggestion => suggestion.toLowerCase().indexOf(this.state.text.toLowerCase())
+                suggestion => suggestion.toLowerCase().indexOf(this.state.text.trim().toLowerCase())
             );
 
             this.setState({
-                activeSuggestion: 0,
                 filteredSuggestions,
                 showSuggestions: true
             })
@@ -42,7 +44,6 @@ export default class SearchBar extends Component {
     //     )
 
     //     this.setState({
-    //         activeSuggestion: 0,
     //         filteredSuggestions,
     //         showSuggestions: true
     //     })
@@ -53,13 +54,12 @@ export default class SearchBar extends Component {
     handleTextChange = (e) => {
         this.setState({ text: e.currentTarget.value}, () => {
             // console.log('handleTextChange() text=', Date.now(), this.state.text)
-            this.autocompleteSearchDebounced(this.state.text);
+            this.autocompleteSearchDebounced(this.state.text.trim());
         });
     }
 
     onClick = (e) => {
         this.setState({
-            activeSuggestion: 0,
             filteredSuggestions: [],
             showSuggestions: false,
             text: e.currentTarget.innerText
@@ -68,40 +68,53 @@ export default class SearchBar extends Component {
         })
     }
 
-    handleKeyPress = (e) => {
-        // User pressed the enter key, update the input and close the suggestions
+    searchKeyPress =(e) => {
         if (e.key === 'Enter') {
             this.setState({
-                activeSuggestion: 0,
                 showSuggestions: false,
-                // text: this.state.filteredSuggestions[this.state.activeSuggestion]
-                text:e.currentTarget.value
+                text:e.currentTarget.value                
             })
-            if (this.state.filteredSuggestions.length) {
-                this.setState({searchresults: this.state.filteredSuggestions.map((suggestion,index) => (
-                    <li key={index}>
-                        {suggestion}
+            if (this.state.filteredSuggestions.length > 2) {
+                this.setState({searchresults: this.props.results.map((r,index) => (
+                    <li key={r.id}>
+                        {r.name}
                     </li>
                 ))})
             } else {
                 this.setState({searchresults:[]})
-            }            
+            }
+        }
+        else if (e.key === "ArrowDown") {
+            this.setState({activeSuggestion: 0 })
+            console.log(this.focusRef.current)
+            this.focusRef.current.focus()
+        }
+    }
+
+    suggestionKeyPress = (e) => {
+        // User pressed the down arrow, increment the index
+        if (e.key === 'ArrowDown') {
+            this.setState({ activeSuggestion: this.state.activeSuggestion + 1 })
+            if (this.state.activeSuggestion - 1 === this.state.filteredSuggestions.length) {
+                return;
+            }
         }
         // User pressed the up arrow, decrement the index
-        else if (e.key === 'Up') {
+        else if (e.key === 'ArrowUp') {
             if (this.state.activeSuggestion === 0) {
+                this.setState({activeSuggestion: null})
                 return;
             }
 
             this.setState({ activeSuggestion: this.state.activeSuggestion - 1 })
         }
-        // User pressed the down arrow, increment the index
-        else if (e.key === 'Down') {
-            if (this.state.activeSuggestion - 1 === this.state.filteredSuggestions.length) {
-                return;
-            }
-
-            this.setState({ activeSuggestion: this.state.activeSuggestion + 1 })
+        // User pressed the enter key, update the input and close the suggestions
+        else if (e.key === 'Enter') {
+            this.setState({
+                activeSuggestion: null,
+                showSuggestions: false,
+                text: this.state.filteredSuggestions[this.state.activeSuggestion]
+            })           
         }
     }
 
@@ -109,7 +122,8 @@ export default class SearchBar extends Component {
         const {
             handleTextChange,
             onClick,
-            handleKeyPress,
+            searchKeyPress,
+            suggestionKeyPress,
             state: {
                 activeSuggestion,
                 filteredSuggestions,
@@ -123,18 +137,23 @@ export default class SearchBar extends Component {
         if (showSuggestions && text) {
             if (filteredSuggestions.length) {
                 suggestionsListComponent = (
-                    <ul className="suggestions">
+                    <ul 
+                        className="suggestions"
+                    >
                         {filteredSuggestions.map((suggestion, index) => {
-                            let className;
+                            let className, ref;
                             if (index === activeSuggestion) {
                                 className = "suggestion-active"
+                                ref = this.focusRef
                             }
 
                             return (
                                 <li
                                     className={className}
-                                    key={suggestion}
+                                    key={index}
                                     onClick={onClick}
+                                    ref={ref}
+                                    onKeyDown={suggestionKeyPress}
                                 >
                                     {suggestion}
                                 </li>
@@ -160,7 +179,7 @@ export default class SearchBar extends Component {
                     value={text}
                     // ref={input => this.search = input}
                     onChange={handleTextChange}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={searchKeyPress}
                 />
                 <div className="search-sub-border"></div>
                 {suggestionsListComponent}

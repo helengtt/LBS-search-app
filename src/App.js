@@ -37,12 +37,12 @@ class App extends Component {
   //   this.resolveSoon(searchStr);
 
   handleSearch = async (searchStr) => {
-    console.log('handleSearch() searchStr=', Date.now(), searchStr)    
+    // console.log('handleSearch() searchStr=', Date.now(), searchStr)    
     return searchBusiness(searchStr, this.state.mapCenter)
-      .then((data) => {
-        console.log('handleSearch() searchStr=', Date.now(), searchStr)            
-        console.log('data=', data)
-        this.setState({ results: data, searchStr: searchStr })
+      .then((results) => {
+        // console.log('handleSearch() searchStr=', Date.now(), searchStr)            
+        this.setState({ results, searchStr })
+        console.log('results:', results)
       })
     /* Another way for async */    
     // console.log('handleSearch() searchStr=', Date.now(), searchStr)  
