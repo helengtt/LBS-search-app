@@ -11,7 +11,7 @@ export default class Popup extends Component {
                 autoPan={false}
             >
                 <a 
-                    className="popup-tile"
+                    className="popup-title"
                     href={business.url}
                     rel="noopener noreferrer"
                     target="_blank"
@@ -26,6 +26,12 @@ export default class Popup extends Component {
                             />
                         </div>
                 }
+                <div className="popup-price">
+                    Price: {business.price}
+                </div>
+                <div className="popup-ratings">
+                    Rating: {business.rating}
+                </div>
             </LeafletPopup>
         )
     }

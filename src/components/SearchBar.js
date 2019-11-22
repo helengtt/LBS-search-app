@@ -58,16 +58,6 @@ export default class SearchBar extends Component {
         });
     }
 
-    onClick = (e) => {
-        this.setState({
-            filteredSuggestions: [],
-            showSuggestions: false,
-            text: e.currentTarget.innerText
-        }, () => {
-            this.autocompleteSearchDebounced(this.state.text);
-        })
-    }
-
     searchKeyPress =(e) => {
         if (e.key === 'Enter') {
             this.setState({
@@ -76,8 +66,18 @@ export default class SearchBar extends Component {
             })
             if (this.state.filteredSuggestions.length > 2) {
                 this.setState({searchresults: this.props.results.map((r,index) => (
-                    <li key={r.id}>
-                        {r.name}
+                    <li key={r.id} className="searchresult">
+                        {r.image_url &&
+                            <div className="searchresult-thumbnail">
+                                <img 
+                                    src={r.image_url}
+                                    alt={r.name}
+                                />
+                            </div>
+                        }
+                        <a href={r.url} className="searchresult-name">
+                            {r.name}
+                        </a>
                     </li>
                 ))})
             } else {
@@ -86,8 +86,8 @@ export default class SearchBar extends Component {
         }
         else if (e.key === "ArrowDown") {
             this.setState({activeSuggestion: 0 })
-            console.log(this.focusRef.current)
-            this.focusRef.current.focus()
+            // console.log(this.focusRef.current.firstChild)
+            this.focusRef.current.firstChild.focus()
         }
     }
 
@@ -118,16 +118,27 @@ export default class SearchBar extends Component {
         }
     }
 
+    onClick = (e) => {
+        this.setState({
+            filteredSuggestions: [],
+            showSuggestions: false,
+            text: e.currentTarget.innerText
+        }, () => {
+            this.autocompleteSearchDebounced(this.state.text);
+        })
+    }
+
     render() {
         const {
             handleTextChange,
-            onClick,
             searchKeyPress,
             suggestionKeyPress,
+            onClick,
             state: {
                 activeSuggestion,
                 filteredSuggestions,
                 showSuggestions,
+                searchresults,
                 text
             }
         } = this;
@@ -139,12 +150,12 @@ export default class SearchBar extends Component {
                 suggestionsListComponent = (
                     <ul 
                         className="suggestions"
+                        ref={this.focusRef}
                     >
                         {filteredSuggestions.map((suggestion, index) => {
-                            let className, ref;
+                            let className;
                             if (index === activeSuggestion) {
                                 className = "suggestion-active"
-                                ref = this.focusRef
                             }
 
                             return (
@@ -152,7 +163,6 @@ export default class SearchBar extends Component {
                                     className={className}
                                     key={index}
                                     onClick={onClick}
-                                    ref={ref}
                                     onKeyDown={suggestionKeyPress}
                                 >
                                     {suggestion}
@@ -184,7 +194,7 @@ export default class SearchBar extends Component {
                 <div className="search-sub-border"></div>
                 {suggestionsListComponent}
                 <ul className='searchresults-list'>
-                    {this.state.searchresults}
+                    {searchresults}
                 </ul>
             </div>
         )
