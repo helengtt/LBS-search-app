@@ -1,56 +1,51 @@
 import React, { Component } from 'react';
 import './SearchBar.css';
 import { debounce } from 'throttle-debounce';
+import { autoComplete } from '../modules/yelpAutocompleteApi'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStar, faStarHalfAlt} from '@fortawesome/free-solid-svg-icons'
 
 export default class SearchBar extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            activeSuggestion: null,
-            filteredSuggestions: [],
+            suggestions: [],
             showSuggestions: false,
             searchresults: [],
             text: ''
         }
-
-        this.focusRef= React.createRef();
     }
     autocompleteSearch = () => {
         // console.log('autocompleteSearch() text=', Date.now(), this.state.text)
-        this.props.onSearch(this.state.text).then(() => {
+        autoComplete(this.state.text)
+        .then((terms) => {
             // console.log('autocompleteSearch_then() text=', Date.now(), this.state.text)
-            const suggestions = this.props.results.map(r => r.name);
+            const suggestions = terms.map(term => term.text);
             // console.log("suggestions=", suggestions);
-            // Filter our suggestions that don't contain the user's input
-            const filteredSuggestions = suggestions.filter(
-                suggestion => suggestion.toLowerCase().indexOf(this.state.text.trim().toLowerCase())
-            );
 
             this.setState({
-                filteredSuggestions,
+                suggestions,
                 showSuggestions: true
             })
         })
+        this.props.onSearch(this.state.text)
     }
     /* Another way for async */
     // autocompleteSearch = async() => {
     //     console.log('autocompleteSearch() text=', Date.now(), this.state.text)
-    //     await this.props.onSearch(this.state.text)
+    //     const results = await autoCompleteSearch(this.state.text)
     //     console.log('autocompleteSearch_afterawait() text=', Date.now(), this.state.text)
-    //     const suggestions = this.props.results.map(r => r.name)
+    //     const suggestions = results.map(r => r.name)
     //     console.log("suggestions=", suggestions)
-    //     const filteredSuggestions = suggestions.filter(
-    //         suggestion => suggestion.toLowerCase().indexOf(this.state.text.toLowerCase())
     //     )
 
     //     this.setState({
-    //         filteredSuggestions,
     //         showSuggestions: true
     //     })
     // }
     autocompleteSearchDebounced = debounce(300, this.autocompleteSearch)
 
-    // debounce an autocomplete input
+    // debounce an autocompleteSearch input
     handleTextChange = (e) => {
         this.setState({ text: e.currentTarget.value}, () => {
             // console.log('handleTextChange() text=', Date.now(), this.state.text)
@@ -58,69 +53,52 @@ export default class SearchBar extends Component {
         });
     }
 
-    searchKeyPress =(e) => {
+    searchKeyPress = (e) => {
         if (e.key === 'Enter') {
             this.setState({
-                showSuggestions: false,
-                text:e.currentTarget.value                
-            })
-            if (this.state.filteredSuggestions.length > 2) {
-                this.setState({searchresults: this.props.results.map((r,index) => (
-                    <li key={r.id} className="searchresult">
-                        {r.image_url &&
-                            <div className="searchresult-thumbnail">
-                                <img 
-                                    src={r.image_url}
-                                    alt={r.name}
-                                />
+                showSuggestions: false             
+            })       
+            if (this.state.suggestions.length > 2) {               
+                this.setState({searchresults: this.props.results.map((r,index) => {
+                    // let ratingstar = document.createElement("div"), 
+                    //     starfull = <FontAwesomeIcon icon={faStar} className="rating-star"/>, 
+                    //     starhalf= <FontAwesomeIcon icon={faStarHalfAlt} className="rating-star"/>,
+                    //     lenint = Math.floor(r.rating),
+                    //     lendec = r.rating-lenint;
+                    // for (let i=0; i<lenint; i++){
+                    //     ratingstar.appendChild(starfull)
+                    // }
+                    // if (lendec !== 0) 
+                    //     ratingstar.appendChild(starhalf)
+                    
+                    return (
+                        <li key={r.id} className="searchresult">
+                            {r.image_url &&
+                                <div className="searchresult-thumbnail">
+                                    <img 
+                                        src={r.image_url}
+                                        alt={r.name}
+                                    />
+                                </div>
+                            }
+                            <div className="searchresult-right">
+                                <a href={r.url} className="searchresult-name">
+                                    {r.name}
+                                </a>
+                                {/* {ratingstar} */}
+                                <FontAwesomeIcon icon={faStar} className="rating-star"/>
                             </div>
-                        }
-                        <a href={r.url} className="searchresult-name">
-                            {r.name}
-                        </a>
-                    </li>
-                ))})
+                        </li>
+                )})})
             } else {
                 this.setState({searchresults:[]})
             }
-        }
-        else if (e.key === "ArrowDown") {
-            this.setState({activeSuggestion: 0 })
-            // console.log(this.focusRef.current.firstChild)
-            this.focusRef.current.firstChild.focus()
-        }
-    }
-
-    suggestionKeyPress = (e) => {
-        // User pressed the down arrow, increment the index
-        if (e.key === 'ArrowDown') {
-            this.setState({ activeSuggestion: this.state.activeSuggestion + 1 })
-            if (this.state.activeSuggestion - 1 === this.state.filteredSuggestions.length) {
-                return;
-            }
-        }
-        // User pressed the up arrow, decrement the index
-        else if (e.key === 'ArrowUp') {
-            if (this.state.activeSuggestion === 0) {
-                this.setState({activeSuggestion: null})
-                return;
-            }
-
-            this.setState({ activeSuggestion: this.state.activeSuggestion - 1 })
-        }
-        // User pressed the enter key, update the input and close the suggestions
-        else if (e.key === 'Enter') {
-            this.setState({
-                activeSuggestion: null,
-                showSuggestions: false,
-                text: this.state.filteredSuggestions[this.state.activeSuggestion]
-            })           
         }
     }
 
     onClick = (e) => {
         this.setState({
-            filteredSuggestions: [],
+            suggestions: [],
             showSuggestions: false,
             text: e.currentTarget.innerText
         }, () => {
@@ -132,11 +110,9 @@ export default class SearchBar extends Component {
         const {
             handleTextChange,
             searchKeyPress,
-            suggestionKeyPress,
             onClick,
             state: {
-                activeSuggestion,
-                filteredSuggestions,
+                suggestions,
                 showSuggestions,
                 searchresults,
                 text
@@ -146,29 +122,20 @@ export default class SearchBar extends Component {
         let suggestionsListComponent;
 
         if (showSuggestions && text) {
-            if (filteredSuggestions.length) {
+            if (suggestions.length) {
                 suggestionsListComponent = (
                     <ul 
                         className="suggestions"
-                        ref={this.focusRef}
                     >
-                        {filteredSuggestions.map((suggestion, index) => {
-                            let className;
-                            if (index === activeSuggestion) {
-                                className = "suggestion-active"
-                            }
-
-                            return (
+                        {suggestions.map((suggestion, index) => (
                                 <li
-                                    className={className}
                                     key={index}
                                     onClick={onClick}
-                                    onKeyDown={suggestionKeyPress}
                                 >
                                     {suggestion}
                                 </li>
                             )
-                        })}
+                        )}
                     </ul>
                 )
             } else {
@@ -187,12 +154,11 @@ export default class SearchBar extends Component {
                     type="text"
                     placeholder="Search and press enter"
                     value={text}
-                    // ref={input => this.search = input}
                     onChange={handleTextChange}
                     onKeyDown={searchKeyPress}
                 />
                 <div className="search-sub-border"></div>
-                {suggestionsListComponent}
+                    {suggestionsListComponent}
                 <ul className='searchresults-list'>
                     {searchresults}
                 </ul>

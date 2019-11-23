@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import SideBar from './components/SideBar'
 import Map from './components/Map'
-import {searchBusiness} from './modules/yelpApi'
+import {searchBusiness} from './modules/yelpBusinessApi'
 
 const INITIAL_VIEWPORT = {
   center: [-33.872961, 151.208452],
@@ -37,19 +37,20 @@ class App extends Component {
   //   this.resolveSoon(searchStr);
 
   handleSearch = async (searchStr) => {
-    // console.log('handleSearch() searchStr=', Date.now(), searchStr)    
-    return searchBusiness(searchStr, this.state.mapCenter)
-      .then((results) => {
-        // console.log('handleSearch() searchStr=', Date.now(), searchStr)            
-        this.setState({ results, searchStr })
-        console.log('results:', results)
-      })
+    // console.log('handleSearch() searchStr=', Date.now(), searchStr)  
+    const results = await searchBusiness(searchStr, this.state.mapCenter)
+    // console.log('handleSearch() searchStr=', Date.now(), searchStr)  
+    this.setState({ results, searchStr })
+    console.log('this.state.results=', this.state.results)
+
     /* Another way for async */    
-    // console.log('handleSearch() searchStr=', Date.now(), searchStr)  
-    // const results = await searchBusiness(searchStr, this.state.mapCenter)
-    // console.log('handleSearch() searchStr=', Date.now(), searchStr)  
-    // this.setState({ results, searchStr })
-    // console.log('this.state.results=', this.state.results)
+    // console.log('handleSearch() searchStr=', Date.now(), searchStr)    
+    // return searchBusiness(searchStr, this.state.mapCenter)
+    //   .then((results) => {
+    //     // console.log('handleSearch() searchStr=', Date.now(), searchStr)            
+    //     this.setState({ results, searchStr })
+    //     console.log('results:', results)
+    //   })
   }
 
   handlePanSearch = async () => {

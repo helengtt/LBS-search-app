@@ -40,15 +40,10 @@
   padding-left: 0.2rem;
 }
 
-.suggestion-active,
 .suggestions li:hover {
   background-color: #999;
   cursor: pointer;
 }
-
-/* .suggestions > li:focus {
-  border: 2px red;
-} */
 
 .no-suggestion {
   background-color: #fff;
@@ -78,7 +73,7 @@
 }
 
 .searchresult {
-  height: 10vh;
+  height: 11vh;
   border-bottom: 1px solid #DDD;
   padding: 5px;
   display: flex;
@@ -105,11 +100,22 @@
   object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
 }
 
-.searchresult-name {
-  text-decoration: none;
-  color: #000;
+.searchresult-right {
   width: 75%;
+  display: flex;
+  flex-direction: column;
+}
+
+.searchresult-right > div {
   padding-left: 5%;
 }
 
+.searchresult-name {
+  text-decoration: none;
+  color: #000;
+  padding-left: 5%;
+}
 
+.rating-star {
+  color: #ffcc00;
+}

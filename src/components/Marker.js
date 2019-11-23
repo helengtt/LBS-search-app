@@ -14,7 +14,7 @@ export default class Marker extends Component {
                     lat: business.coordinates.latitude,
                     lng: business.coordinates.longitude,
                 }}
-                riseOnHover
+                riseOnHover={true}
                 icon={new Leaflet.Icon({
                     iconUrl: mapIcon,
                     iconSize: [25,55],
