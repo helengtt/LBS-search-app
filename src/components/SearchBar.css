@@ -100,6 +100,7 @@
   object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
 }
 
+<<<<<<< HEAD
 .searchresult-right {
   width: 75%;
   display: flex;
@@ -119,3 +120,13 @@
 .rating-star {
   color: #ffcc00;
 }
+=======
+.searchresult-name {
+  text-decoration: none;
+  color: #000;
+  width: 75%;
+  padding-left: 5%;
+}
+
+
+>>>>>>> 36377c62e2dc8f3aae9d8e6b04c28b9ba7e602ed

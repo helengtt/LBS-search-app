@@ -106,6 +106,16 @@ export default class SearchBar extends Component {
         })
     }
 
+    onClick = (e) => {
+        this.setState({
+            filteredSuggestions: [],
+            showSuggestions: false,
+            text: e.currentTarget.innerText
+        }, () => {
+            this.autocompleteSearchDebounced(this.state.text);
+        })
+    }
+
     render() {
         const {
             handleTextChange,
@@ -126,6 +136,7 @@ export default class SearchBar extends Component {
                 suggestionsListComponent = (
                     <ul 
                         className="suggestions"
+                        ref={this.focusRef}
                     >
                         {suggestions.map((suggestion, index) => (
                                 <li
