@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import './SearchBar.css';
+import SearchResults from './SearchResults';
 import { debounce } from 'throttle-debounce';
 import { autoComplete } from '../modules/yelpAutocompleteApi'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faStarHalfAlt} from '@fortawesome/free-solid-svg-icons'
 
 export default class SearchBar extends Component {
     constructor(props) {
@@ -11,6 +10,7 @@ export default class SearchBar extends Component {
         this.state = {
             suggestions: [],
             showSuggestions: false,
+            showSearchResults:false,
             searchresults: [],
             text: ''
         }
@@ -53,46 +53,12 @@ export default class SearchBar extends Component {
         });
     }
 
-    searchKeyPress = (e) => {
+    handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             this.setState({
-                showSuggestions: false             
-            })       
-            if (this.state.suggestions.length > 2) {               
-                this.setState({searchresults: this.props.results.map((r,index) => {
-                    // let ratingstar = document.createElement("div"), 
-                    //     starfull = <FontAwesomeIcon icon={faStar} className="rating-star"/>, 
-                    //     starhalf= <FontAwesomeIcon icon={faStarHalfAlt} className="rating-star"/>,
-                    //     lenint = Math.floor(r.rating),
-                    //     lendec = r.rating-lenint;
-                    // for (let i=0; i<lenint; i++){
-                    //     ratingstar.appendChild(starfull)
-                    // }
-                    // if (lendec !== 0) 
-                    //     ratingstar.appendChild(starhalf)
-                    
-                    return (
-                        <li key={r.id} className="searchresult">
-                            {r.image_url &&
-                                <div className="searchresult-thumbnail">
-                                    <img 
-                                        src={r.image_url}
-                                        alt={r.name}
-                                    />
-                                </div>
-                            }
-                            <div className="searchresult-right">
-                                <a href={r.url} className="searchresult-name">
-                                    {r.name}
-                                </a>
-                                {/* {ratingstar} */}
-                                <FontAwesomeIcon icon={faStar} className="rating-star"/>
-                            </div>
-                        </li>
-                )})})
-            } else {
-                this.setState({searchresults:[]})
-            }
+                showSuggestions: false,
+                showSearchResults: true             
+            })                  
         }
     }
 
@@ -119,12 +85,12 @@ export default class SearchBar extends Component {
     render() {
         const {
             handleTextChange,
-            searchKeyPress,
+            handleKeyPress,
             onClick,
             state: {
                 suggestions,
                 showSuggestions,
-                searchresults,
+                showSearchResults,
                 text
             }
         } = this;
@@ -166,13 +132,14 @@ export default class SearchBar extends Component {
                     placeholder="Search and press enter"
                     value={text}
                     onChange={handleTextChange}
-                    onKeyDown={searchKeyPress}
+                    onKeyDown={handleKeyPress}
                 />
                 <div className="search-sub-border"></div>
                     {suggestionsListComponent}
-                <ul className='searchresults-list'>
-                    {searchresults}
-                </ul>
+                <SearchResults 
+                    results = {this.props.results}
+                    showSearchResults = {showSearchResults}
+                />
             </div>
         )
     }
