@@ -29,7 +29,7 @@
   max-height: 200px;
   overflow: auto;
   padding-left: 0;
-  width: calc(100% + 1rem);
+  width: 100%;
   background-color: white;
   border-left: 1px solid #DDD;
   box-shadow: 0 1px 1px #DDD;
@@ -47,14 +47,4 @@
 
 .no-suggestion {
   background-color: #fff;
-}
-
-.search-sub-border {
-  border-bottom: 1px solid #DDD;
-  box-shadow: 0 1px 1px #DDD;
-  position: absolute;
-  top: 100%;
-  bottom: 0;
-  right: 0;
-  left: 0;
 }

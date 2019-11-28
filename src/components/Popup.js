@@ -4,7 +4,21 @@ import './Popup.css'
 
 export default class Popup extends Component {
     render() {
-        const {business} = this.props
+        const {business} = this.props;
+        let ratingstar = "",
+            greystar = "",
+            ratingint = Math.floor(business.rating),
+            ratingdec = business.rating-ratingint,
+            ratinggrey = 5 - Math.ceil(business.rating);
+        for (let i=0; i<ratingint; i++)
+            ratingstar += "★"
+        if (ratingdec !== 0) 
+            ratingstar += "☆"
+        for (let i=0; i<ratinggrey; i++)
+            greystar += "★"
+
+        const category = business.categories[0].alias.charAt(0).toUpperCase() + business.categories[0].alias.slice(1);    
+        
         return (
             <LeafletPopup
                 closeButton={false} 
@@ -27,10 +41,16 @@ export default class Popup extends Component {
                         </div>
                 }
                 <div className="popup-price">
-                    Price: {business.price}
+                    {business.price}
                 </div>
                 <div className="popup-ratings">
-                    Rating: {business.rating}
+                    <span className="ratingstar"> {ratingstar} </span>
+                    <span className="greystar"> {greystar} </span>
+                    <span>({business.review_count})</span>
+                </div>
+                <div>
+                    <span className="popup-phone"> {business.phone} </span>
+                    {category}
                 </div>
             </LeafletPopup>
         )

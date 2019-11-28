@@ -1,48 +1,58 @@
 import React, { Component } from 'react';
 import './SearchResults.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStar, faStarHalfAlt} from '@fortawesome/free-solid-svg-icons'
 
 export default class SearchResults extends Component {
-    constructor(props) {
-        super(props);
-        this.starRef = React.createRef();
-    }
     render() {
         let searchresults;
 
         if (this.props.showSearchResults) {
             searchresults = this.props.results.map((r) => {
-                let starnode = this.starRef.current,
-                    starfull = <FontAwesomeIcon icon={faStar} className="rating-star"/>, 
-                    starhalf= <FontAwesomeIcon icon={faStarHalfAlt} className="rating-star"/>,
-                    lenint = Math.floor(r.rating),
-                    lendec = r.rating-lenint;
-                console.log(starnode)
-                for (let i=0; i<lenint; i++){
-                    starnode.appendChild(starfull)
-                }
-                if (lendec !== 0) 
-                    starnode.appendChild(starhalf)
-            return (
-                <li key={r.id} className="searchresult">
-                    {r.image_url &&
-                        <div className="searchresult-thumbnail">
+                let ratingstar = "",
+                    greystar = "",
+                    ratingint = Math.floor(r.rating),
+                    ratingdec = r.rating-ratingint,
+                    ratinggrey = 5 - Math.ceil(r.rating);
+                for (let i=0; i<ratingint; i++)
+                    ratingstar += "★"
+                if (ratingdec !== 0) 
+                    ratingstar += "☆"
+                for (let i=0; i<ratinggrey; i++)
+                    greystar += "★"
+
+                let distance;    
+                if (r.distance <1000)
+                    distance = Math.round(r.distance) + "m"
+                else
+                    distance = (r.distance/1000).toFixed(1) + "km"
+
+                const category = r.categories[0].alias.charAt(0).toUpperCase() + r.categories[0].alias.slice(1)    
+                return (
+                    <li key={r.id} className="searchresult">       
+                        <div className="thumbnail">
                             <img 
                                 src={r.image_url}
                                 alt={r.name}
                             />
                         </div>
-                    }
-                    <div className="searchresult-right" ref={this.starRef}>
-                        <a href={r.url} className="searchresult-name">
-                            {r.name}
-                        </a>
-                        <div className="ratingstar"></div>
-                        {/* <FontAwesomeIcon icon={faStar} className="rating-star"/> */}
-                    </div>
-                </li>
-            )})
+                        <div className="searchresult-right" >
+                            <a href={r.url} target="_blank" className="name">
+                                {r.name}
+                            </a>
+                            <div>
+                                <span> {r.rating.toFixed(1)} </span>
+                                <span className="ratingstar"> {ratingstar} </span>
+                                <span className="greystar"> {greystar} </span>
+                                <span>({r.review_count})</span>
+                            </div>
+                            <div>
+                                <span className="distance"> {distance} </span>
+                                <span> {category} </span>
+                                {r.price && <span> • {r.price} </span>}
+
+                            </div>
+                        </div>
+                    </li>
+                )})
         }
 
         return (

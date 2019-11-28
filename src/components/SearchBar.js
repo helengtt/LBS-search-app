@@ -134,8 +134,7 @@ export default class SearchBar extends Component {
                     onChange={handleTextChange}
                     onKeyDown={handleKeyPress}
                 />
-                <div className="search-sub-border"></div>
-                    {suggestionsListComponent}
+                {suggestionsListComponent}
                 <SearchResults 
                     results = {this.props.results}
                     showSearchResults = {showSearchResults}
