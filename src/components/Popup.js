@@ -48,10 +48,8 @@ export default class Popup extends Component {
                     <span className="greystar"> {greystar} </span>
                     <span>({business.review_count})</span>
                 </div>
-                <div>
-                    <span className="popup-phone"> {business.phone} </span>
-                    {category}
-                </div>
+                <div>{category}</div>
+                <div className="popup-phone"> {business.display_phone} </div>
             </LeafletPopup>
         )
     }

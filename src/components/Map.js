@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {Map as LeafletMap, TileLayer} from 'react-leaflet'
 import './Map.css'
 import Marker from './Marker.js'
@@ -27,7 +27,8 @@ export default class Map extends Component {
                 />
                 {results.map(business => (
                     <Marker 
-                        key={business.id} 
+                        key={business.id}
+                        id={business.id} 
                         business={business}
                     />
                 ))}
@@ -35,3 +36,4 @@ export default class Map extends Component {
         )
     }
 }
+

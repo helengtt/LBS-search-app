@@ -11,7 +11,6 @@ export default class SearchBar extends Component {
             suggestions: [],
             showSuggestions: false,
             showSearchResults:false,
-            searchresults: [],
             text: ''
         }
     }
