@@ -24,7 +24,7 @@ class Marker extends Component {
                 onMouseOut={this.onMouseOut}
                 icon={(isHover) ? new Leaflet.Icon({
                     iconUrl: mapIcon,
-                    iconSize: [35,65],
+                    iconSize: [40,70],
                     popupAnchor:[0, -35],
                 }) : new Leaflet.Icon({
                     iconUrl: mapIcon,
@@ -39,7 +39,7 @@ class Marker extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    console.log(ownProps.id, state)
+    // console.log(ownProps.id, state)
     return ({     
         isHover: ownProps.id === state.mouseHover.resultId
     })

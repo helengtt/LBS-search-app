@@ -4,32 +4,40 @@ import SideBar from './components/SideBar'
 import Map from './components/Map'
 import {searchBusiness} from './modules/yelpBusinessApi'
 
-const INITIAL_VIEWPORT = {
-  center: [-33.872961, 151.208452],
-  zoom: 17,
-
-}
-
-class App extends Component {
+class App extends Component {  
   constructor(props) {
     super(props)
 
     this.state = {
       results: [],
       mapCenter: {
-        lat: INITIAL_VIEWPORT.center[0],
-        lng: INITIAL_VIEWPORT.center[1],
+        lat: -33.872961,
+        lng: 151.208452,
       },
       searchStr: '',
     }
   }
-  
+
+  componentDidMount = () => {
+    let appstate = this
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          let lat = position.coords.latitude;
+          let lng = position.coords.longitude;
+          appstate.setState({
+            mapCenter: {lat,lng}
+          })
+        }
+      )
+    }
+ 
+  }
+
   /* Test with mock API */
   // resolveSoon = (x) => {
   //   return new Promise(resolve => {
-  //     setTimeout(() => {
-  //       resolve([x]);
-  //     }, 2000);
+  //     setTimeout(() => {resolve([x]);}, 2000);
   //   });
   // }
 
@@ -42,15 +50,6 @@ class App extends Component {
     // console.log('handleSearch() searchStr=', Date.now(), searchStr)  
     this.setState({ results, searchStr })
     console.log('this.state.results=', this.state.results)
-
-    /* Another way for async */    
-    // console.log('handleSearch() searchStr=', Date.now(), searchStr)    
-    // return searchBusiness(searchStr, this.state.mapCenter)
-    //   .then((results) => {
-    //     // console.log('handleSearch() searchStr=', Date.now(), searchStr)            
-    //     this.setState({ results, searchStr })
-    //     console.log('results:', results)
-    //   })
   }
 
   handlePanSearch = async () => {
@@ -73,6 +72,10 @@ class App extends Component {
   }
 
   render() {
+    const INITIAL_VIEWPORT = {
+      center: [this.state.mapCenter.lat, this.state.mapCenter.lng],
+      zoom: 17,
+    }
     return (
       <div className="container">
         <SideBar
