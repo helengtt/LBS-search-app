@@ -6,7 +6,7 @@ export default class SideBar extends Component {
     render() {
         return (
             <div className="sidebar">
-                <div className="sidebar-title">Find your restaurant</div>
+                <div className="sidebar-title">Find Your ...</div>
                 <SearchBar
                     onSearch={this.props.onSearch}
                     results={this.props.results}

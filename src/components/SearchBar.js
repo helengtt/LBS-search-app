@@ -29,19 +29,7 @@ export default class SearchBar extends Component {
         })
         this.props.onSearch(this.state.text)
     }
-    /* Another way for async */
-    // autocompleteSearch = async() => {
-    //     console.log('autocompleteSearch() text=', Date.now(), this.state.text)
-    //     const results = await autoCompleteSearch(this.state.text)
-    //     console.log('autocompleteSearch_afterawait() text=', Date.now(), this.state.text)
-    //     const suggestions = results.map(r => r.name)
-    //     console.log("suggestions=", suggestions)
-    //     )
 
-    //     this.setState({
-    //         showSuggestions: true
-    //     })
-    // }
     autocompleteSearchDebounced = debounce(300, this.autocompleteSearch)
 
     // debounce an autocompleteSearch input
@@ -128,7 +116,7 @@ export default class SearchBar extends Component {
                 <input
                     className="search-bar-input"
                     type="text"
-                    placeholder="Search and press enter"
+                    placeholder="Restaurants, shops, services ..."
                     value={text}
                     onChange={handleTextChange}
                     onKeyDown={handleKeyPress}

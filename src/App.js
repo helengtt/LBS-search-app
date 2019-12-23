@@ -14,11 +14,15 @@ class App extends Component {
         lat: -33.872961,
         lng: 151.208452,
       },
+      zoom: 17,
       searchStr: '',
     }
+
   }
 
+  // geolocation
   componentDidMount = () => {
+
     let appstate = this
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -66,15 +70,17 @@ class App extends Component {
         lat: viewport.center[0],
         lng: viewport.center[1],
       },
+      zoom: viewport.zoom
     })
 
     if (viewport.zoom > 14) this.handlePanSearch()
   }
 
   render() {
+    const {mapCenter, zoom} = this.state
     const INITIAL_VIEWPORT = {
-      center: [this.state.mapCenter.lat, this.state.mapCenter.lng],
-      zoom: 17,
+      center: [mapCenter.lat, mapCenter.lng],
+      zoom,
     }
     return (
       <div className="container">
