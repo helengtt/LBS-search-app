@@ -1,80 +1,89 @@
 .searchresults-list {
-    list-style-type:none;
-    padding:0;
-    margin:0;
-    z-index: -1;
-    position: absolute;
+  list-style-type:none;
+  padding:0;
+  margin:0;
+  z-index: -1;
+  position: absolute;
+  overflow: scroll;
+  border-top: 1px solid #DDD;
+  width: 100%;
+  top: calc(39px + 30vh);
+}
+  
+.searchresult {
+  height: 11vh;
+  border-bottom: 1px solid #DDD;
+  padding: 5px;
+  padding-left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* responsive square image */
+.thumbnail {
+  display: table;
+  position: relative;
+  width: 25%;
+  padding-bottom: 25%;
+  height: 0;
+  overflow: hidden;
+}
+
+.thumbnail img {
+  display: table-cell;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-position: center center;
+  object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
+}
+
+.searchresult-right {
+  height: 100%;
+  width: 75%;
+  padding-left: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+span {
+  margin-right: 0.1vw;
+}
+
+.name {
+  text-decoration: none;
+  color: #000;
+
+}
+
+.searchresult-right > div {
+  font-size: 0.9rem;
+  color: rgb(94, 93, 93);
+}
+
+.ratingstar {
+  color: #ffcc00;
+  margin-right: 0;
+  /* border: 1px solid red; */
+
+}
+
+.greystar {
+  color: #DDD;
+  /* border: 1px solid red; */
+}
+
+.distance {
+  float: right;
+}
+
+@media (min-width: 480px) {
+  .searchresults-list {
+    top: auto;
     height: 80vh;
-    overflow: auto;
-    border-top: 1px solid #DDD;
     border-bottom: 1px solid #DDD;
-    width: 100%;
-  }
-  
-  .searchresult {
-    height: 11vh;
-    border-bottom: 1px solid #DDD;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  /* responsive square image */
-  .thumbnail {
-    display: table;
-    position: relative;
-    width: 25%;
-    padding-bottom: 25%;
-    height: 0;
-    overflow: hidden;
-  }
-  
-  .thumbnail img {
-    display: table-cell;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-position: center center;
-    object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
-  }
-  
-  .searchresult-right {
-    height: 100%;
-    width: 75%;
-    padding-left: 5%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-  }
-
-  span {
-      margin-right: 0.1vw;
-  }
-  
-  .name {
-    text-decoration: none;
-    color: #000;
 
   }
-  
-  .searchresult-right > div {
-    font-size: 0.9rem;
-    color: rgb(94, 93, 93);
-  }
-
-  .ratingstar {
-    color: #ffcc00;
-    margin-right: 0;
-    /* border: 1px solid red; */
-
-  }
-
-  .greystar {
-      color: #DDD;
-      /* border: 1px solid red; */
-  }
-
-  .distance {
-      float: right;
-  }
+}

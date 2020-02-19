@@ -85,12 +85,10 @@ class Main extends Component {
     return (
       <div className="main">
         <SideBar
-          className="sideBar"
           onSearch={this.handleSearch}
           results={this.state.results}
         />
         <Map
-          className="map"
           initialViewport={INITIAL_VIEWPORT}
           results={this.state.results}
           onViewportChanged={this.handleViewportChange}

@@ -42,7 +42,7 @@ nav a:hover {
 
 .navNarrow .narrowLinks {
     display: none;
-
+    padding: 0.5em;
 }
 
 .navNarrow .narrowLinks a {

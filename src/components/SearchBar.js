@@ -3,6 +3,8 @@ import './SearchBar.css';
 import SearchResults from './SearchResults';
 import { debounce } from 'throttle-debounce';
 import { autoComplete } from '../modules/yelpAutocompleteApi'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 export default class SearchBar extends Component {
     constructor(props) {
@@ -121,6 +123,7 @@ export default class SearchBar extends Component {
                     onChange={handleTextChange}
                     onKeyDown={handleKeyPress}
                 />
+                <FontAwesomeIcon className="search-bar-icon" icon={faSearch}></FontAwesomeIcon>
                 {suggestionsListComponent}
                 <SearchResults 
                     results = {this.props.results}

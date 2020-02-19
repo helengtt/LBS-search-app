@@ -1,4 +1,10 @@
 .main {
-    display: flex;
+    display: block;
     position: relative;
+}
+
+@media (min-width: 480px) {
+    .main {
+        display: flex;
+    }
 }

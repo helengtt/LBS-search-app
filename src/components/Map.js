@@ -13,9 +13,10 @@ export default class Map extends Component {
 
         return (
             <LeafletMap
+                className="leaflet-map"
                 viewport={initialViewport}
                 ref={this.mapRef}
-                style={{height: '100vh'}}
+                zoomControl={false}
                 animate
                 onViewportChanged={onViewportChanged}
             >
