@@ -16,6 +16,7 @@ export default class SearchBar extends Component {
             text: ''
         }
     }
+
     autocompleteSearch = () => {
         // console.log('autocompleteSearch() text=', Date.now(), this.state.text)
         autoComplete(this.state.text)
@@ -52,22 +53,12 @@ export default class SearchBar extends Component {
     }
 
     onClick = (e) => {
+        this.props.onSearch(e.currentTarget.innerText);
         this.setState({
             suggestions: [],
             showSuggestions: false,
+            showSearchResults:true,
             text: e.currentTarget.innerText
-        }, () => {
-            this.autocompleteSearchDebounced(this.state.text);
-        })
-    }
-
-    onClick = (e) => {
-        this.setState({
-            filteredSuggestions: [],
-            showSuggestions: false,
-            text: e.currentTarget.innerText
-        }, () => {
-            this.autocompleteSearchDebounced(this.state.text);
         })
     }
 

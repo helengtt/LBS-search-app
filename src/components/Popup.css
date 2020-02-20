@@ -1,9 +1,9 @@
 .leaflet-popup-content-wrapper {
-  width: 12vw;
+  width: 16em;
 }
 
 a.popup-title {
-    font-size: 1rem;
+    font-size: 1em;
     font-weight: 700;
     color: inherit;
 }
@@ -14,8 +14,8 @@ a.popup-title {
 
 .popup-thumbnail {
   margin-top: 8px;
-  width: 10vw;
-  height: 10vw;
+  width: 12em;
+  height: 12em;
 }
 
 .popup-thumbnail img {
