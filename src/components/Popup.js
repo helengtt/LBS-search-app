@@ -34,10 +34,16 @@ export default class Popup extends Component {
                 </a>
                 {business.image_url &&
                         <div className="popup-thumbnail">
-                            <img 
-                                src={business.image_url}
-                                alt={business.name}
-                            />
+                            <a  
+                                href={business.url}
+                                rel="noopener noreferrer" 
+                                target="_blank"
+                            >
+                                <img 
+                                    src={business.image_url}
+                                    alt={business.name}
+                                />
+                            </a>
                         </div>
                 }
                 <div className="popup-price">

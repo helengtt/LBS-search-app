@@ -9,7 +9,9 @@ import './Marker.css'
 class Marker extends Component {
 
     onMouseOver = (e) => e.target.openPopup()
-    onMouseOut = (e) => e.target.closePopup()
+    onMouseOut = (e) => {
+        setTimeout(function(){e.target.closePopup()}, 1000)
+    }
 
     render () {
         const {business, isHover} = this.props
@@ -19,7 +21,7 @@ class Marker extends Component {
                     lat: business.coordinates.latitude,
                     lng: business.coordinates.longitude,
                 }}
-                riseOnHover
+                riseOnHover={true}
                 onMouseOver={this.onMouseOver}
                 onMouseOut={this.onMouseOut}
                 icon={(isHover) ? new Leaflet.Icon({
